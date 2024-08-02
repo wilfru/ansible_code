@@ -1,0 +1,19 @@
+---
+
+- hosts: all
+  become: yes
+  tasks:
+  
+  - name: Installing postgresql to all servers
+    package:
+      name: postgresql16-server, postgresql15-server, postgresql14-server
+      state: present
+
+
+  - name: Enable postgresql services
+    service:
+      name: postgresql-16, postgresql-15, postgresql-14
+      state: started
+      enabled: yes
+
+         
