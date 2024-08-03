@@ -1,0 +1,11 @@
+---
+
+- hosts: all
+  become: yes
+  become_user: postgres
+  
+  tasks:
+
+  - name: pg_ctl 16 to reload pg_hba config
+    ansible.builtin.shell: " /usr/pgsql-16/bin/pg_ctl reload -D /var/lib/pgsql/16/data "
+

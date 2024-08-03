@@ -1,0 +1,41 @@
+---
+
+- hosts: root@192.168.100.80
+  become: yes
+  tasks:
+    
+  - name: Grant user replicator from network 192.168.100.77/24 access for replication with  trust authentication
+    community.postgresql.postgresql_pg_hba:
+      dest: /var/lib/pgsql/16/data/pg_hba.conf
+      contype: host
+      users: replicator
+      source: 192.168.100.77/24
+      databases: replication
+      method: trust
+
+  - name: Grant user replicator from network 192.168.100.77/24 access for host with  trust authentication
+    community.postgresql.postgresql_pg_hba:
+      dest: /var/lib/pgsql/16/data/pg_hba.conf
+      contype: host
+      users: replicator
+      source: 192.168.100.77/24
+      databases: all
+      method: trust
+
+  - name: Grant user replicator from network 192.168.100.77/24 access for replication with  trust authentication
+    community.postgresql.postgresql_pg_hba:
+      dest: /var/lib/pgsql/16/data/pg_hba.conf
+      contype: host
+      users: postgres
+      source: 192.168.100.77/24
+      databases: replication
+      method: trust
+
+  - name: Grant user replicator from network 192.168.100.77/24 access for host with  trust authentication
+    community.postgresql.postgresql_pg_hba:
+      dest: /var/lib/pgsql/16/data/pg_hba.conf
+      contype: host
+      users: postgres
+      source: 192.168.100.77/24
+      databases: all
+      method: trust

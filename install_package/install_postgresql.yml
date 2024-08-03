@@ -4,6 +4,10 @@
   become: yes
   tasks:
   
+  - name: Update cache 
+    package:
+      update_cache: yes
+
   - name: Installing postgresql to all servers
     package:
       name: postgresql16-server, postgresql15-server, postgresql14-server
@@ -12,7 +16,7 @@
 
   - name: Enable postgresql services
     service:
-      name: postgresql-16, postgresql-15, postgresql-14
+      name: postgresql-16
       state: started
       enabled: yes
 

@@ -1,0 +1,73 @@
+---
+
+- hosts: root@192.168.100.80
+  become: true
+  become_user: postgres
+  gather_facts: yes
+  
+  vars:
+    dbname: postgres
+    dbuser: replicator
+
+  tasks:
+ 
+  - name: ensure  cache is up to date
+    package:
+      update_cache: yes
+    register: cache_results
+
+  - debug:
+      var: cache_results
+
+  - name: ensure database is created
+    community.postgresql.postgresql_db: 
+      name: "{{dbname}}"
+      port: 5431
+    register: create_results
+
+  - debug:
+      var: create_results
+
+  - name: ensure user has access to database
+    community.postgresql.postgresql_user: 
+      db: "{{dbname}}" 
+      name: "{{dbuser}}" 
+      port: 5431
+      priv: ALL
+    register: access_results
+
+  - debug:
+      var: access_results
+
+  - name: ensure user has necessary privilege
+    community.postgresql.postgresql_user: 
+      name: "{{dbuser}}"
+      port: 5431
+      role_attr_flags: REPLICATION,CREATEDB
+    register: priv_results
+
+  - debug:
+      var: priv_results
+
+  - name: ensure  other user can access the database
+    community.postgresql.postgresql_privs: 
+      db: "{{dbname}}"
+      port: 5431
+      role: PUBLIC 
+      type: database 
+      privs: ALL 
+      state: present  
+    register: show_db
+
+  - debug:
+      var: show_db    
+        
+        
+  - name: Collect statistcs of database
+    community.postgresql.postgresql_info:
+      port: 5431
+      filter: dat*, ver*
+    register: results
+
+  - debug:
+      var: results

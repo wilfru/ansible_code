@@ -1,0 +1,33 @@
+---
+
+- hosts: standby_pg16
+  become: yes
+  become_user: postgres
+
+  vars:
+    dbname: postgres
+    dbuser: postgres
+    dbport: 5431
+
+
+  tasks:
+
+  - name: Initialize database on all cluster
+    shell:
+      cmd: /usr/pgsql-16/bin/pg_ctl initdb -D /var/lib/pgsql/16/data
+    register: results
+
+  - debug:
+      var: results
+
+  - name: Connect after initialize database
+    postgresql_query:
+      db: "{{dbname}}"
+      login_user: "{{dbuser}}"
+      query: \l
+
+    register: results1
+
+  - debug:
+      var: results1
+

@@ -1,0 +1,23 @@
+---
+
+- hosts: all
+  become: yes
+  tasks:
+
+  - name: ensure  cache is up to date
+    package:
+      update_cache: yes
+
+  - name: ensure packages are installed
+    package:
+      name:
+      - postgresql16
+      - postgresql15
+      - postgresql14
+      - httpd
+      - postgresql16-devel
+      - postgresql15-devel
+      - postgresql14-devel
+      - python-psycopg2
+      state: latest
+

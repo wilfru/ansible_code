@@ -1,0 +1,16 @@
+---
+
+- hosts: standby_pg16
+  become: yes
+    #become_user: yes
+  gather_facts: false
+
+  tasks:
+
+  - name: Clean data directory
+    shell:
+      cmd: rm -rf /var/lib/pgsql/16/data/*
+    register: result
+
+  - debug:
+      var: result
