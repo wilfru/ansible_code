@@ -1,0 +1,79 @@
+---
+
+- hosts: primary
+  become: yes
+  become_user: postgres
+  gather_facts: no
+
+  vars: 
+    dbname: postgres
+    dbuser: replicator
+    dbport: 5431
+    dbdir1: /var/lib/pgsql/16/data
+    dbhost: "192.168.100.79"
+
+  tasks:
+
+    # - name: Update cache for all server
+    #package:
+    # update_cache: yes
+    #register: cache
+
+    #- debug:
+    # var: cache
+
+  - name: Edit postgresql config for replication
+    community.postgresql.postgresql_set:
+      db: "{{dbname}}"
+      login_host: "{{dbhost}}"
+      login_user: "{{dbuser}}"
+      port: "{{dbport}}"
+      name: max_wal_senders
+      value: 10
+    register: result1
+
+  - debug:
+      var: result1 
+
+  - name: Edit postgresql config for replication
+    community.postgresql.postgresql_set:
+      db: "{{dbname}}"
+      login_host: "{{dbhost}}"
+      login_user: "{{dbuser}}"
+      port: "{{dbport}}"
+      name:  max_wal_size
+      value: 16GB
+    register: result2
+
+  - debug:
+      var: result2 
+
+  - name: Edit postgresql config for replication
+    community.postgresql.postgresql_set:
+      db: "{{dbname}}"
+      login_host: "{{dbhost}}"
+      login_user: "{{dbuser}}"
+      port: "{{dbport}}"
+      name: hot_standby
+      value: true
+    register: result3
+
+  - debug:
+      var: result3
+
+  - name: Restart postgresql for changes to take effect
+    shell:
+      cmd: "/usr/pgsql-16/bin/pg_ctl -D {{dbdir1}} restart --mode=fast"
+    register: result4
+
+  - debug:
+      var: result4
+
+  - name: Tail postgresql log limit 10 line
+    shell:
+      cmd: tail -n 10 /var/lib/pgsql/16/data/log/postgresql.log
+    register: result5
+
+  - debug:
+      var: result5
+

@@ -4,7 +4,9 @@ root@192.168.100.78
 
 [standby_pg15]
 root@192.168.100.129
-root@192.168.100.76
+
+[control server]
+root@192.168.100.82
 
 [primary]
-root@192.168.100.68
+root@192.168.100.80

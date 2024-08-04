@@ -1,0 +1,24 @@
+---
+
+- hosts: standby_pg16
+  become: yes
+  become_user: postgres
+
+  vars:
+    dbhost: "192.168.100.79"
+    dbport: 5431
+    dbuser: replicator
+    dbname: postgre
+
+
+  tasks:
+
+  - name: Connect to standby server and initialize ssh to primary
+    shell:
+      cmd: ssh-copy-id -i ~/.ssh/id_ed25519.pub postgres@192.168.100.79
+        #prompt: yes
+        #prompt_password: Betterwil2024@!
+    register: result
+
+  - debug:
+      var: result
