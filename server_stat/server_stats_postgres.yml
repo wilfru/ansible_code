@@ -21,7 +21,7 @@
 
   - name: ensure database is created
     community.postgresql.postgresql_db: 
-      name: "{{dbname}}"
+      name: "{{dbuser}}"
       port: 5431
     register: create_results
 
