@@ -1,0 +1,10 @@
+---
+- name: Setup Postgresql Monitoring with Prometheus and Grafana
+  hosts: control_server
+  become: yes
+  roles:
+    - prometheus
+      #- postgres_exporter
+    - grafana
+
+

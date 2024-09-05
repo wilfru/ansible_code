@@ -1,0 +1,22 @@
+---
+
+- hosts: primary 192.168.100.78
+  become: yes
+  gather_facts: no
+
+
+  tasks:
+  - name: Update file permission postgres_exporter
+    shell:
+      cmd: "chown postgres:postgres /usr/local/bin/postgres_exporter"
+    register: result
+  - debug:
+      var: result
+
+  - name: Update necessary directory permission  prometheus
+    shell:
+      cmd: " chown prom_user:prom_user /etc/prometheus/prometheus.yml &&  chown  postgres:postgres /etc/default/postgres_exporter"
+    become_user: root
+    register: result
+  - debug:
+      var: result

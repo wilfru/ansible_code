@@ -13,12 +13,45 @@
 
   tasks:
 
-  - name: Connect to standby server and initialize ssh to primary
+  - name: Update cache for standby servers
+    package:
+      update_cache: yes
+    register: cache
+
+  - debug:
+      var: cache
+  
+  - name: Check if ssh port 22, 5431 exit and open
     shell:
-      cmd: ssh-copy-id -i ~/.ssh/id_ed25519.pub postgres@192.168.100.79
-        #prompt: yes
-        #prompt_password: Betterwil2024@!
+      cmd: "firewall-cmd --list-ports"
     register: result
 
   - debug:
       var: result
+
+  - name: Enable port 22 on firewall if it has not been enabled
+    shell: 
+      cmd: "firewall-cmd --zone=public --add-port=22/tcp --permanent" 
+    when: "'22/tcp' is not in result.stdout"
+    register: result2
+
+  - debug:
+      var: result2
+
+  - name: Enable port 5431 on firewall if it has not been enabled
+    shell:
+      cmd: "firewall-cmd --zone=public --add-port=22/tcp --permanent"
+    when: "'5431/tcp' is not in result.stdout"
+    register: result3
+
+  - debug:
+      var: result3
+
+  - name: Reload firewall if port install
+    shell:
+      cmd: "firewall-cmd --reload"
+    when: "'22/tcp' is not in result.stdout"
+    register: result4
+
+  - debug:
+      var: result4

@@ -1,12 +1,15 @@
 [standby_pg16]
-root@192.168.100.65
-root@192.168.100.78
-
+192.168.100.65 ansible_connection=ssh ansible_user=root 
+192.168.100.78 ansible_connection=ssh ansible_user=root 
+#192.168.43.93  ansible_connection=ssh ansible_user=root
+#192.168.43.168 ansible_connection=ssh ansible_user=root
 [standby_pg15]
-root@192.168.100.129
+192.168.100.129 ansible_connection=ssh ansible_user=root 
 
-[control server]
-root@192.168.100.82
+[control_server]
+192.168.100.82 ansible_connection=ssh ansible_user=root
+#192.168.43.95  ansible_connection=ssh ansible_user=root
 
 [primary]
-root@192.168.100.80
+#192.168.100.80 ansible_connection=ssh ansible_user=root
+192.168.100.76 ansible_connection=ssh ansible_user=root

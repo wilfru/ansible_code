@@ -1,0 +1,24 @@
+---
+
+- hosts: primary 192.168.100.78
+  become: yes
+  gather_facts: no
+
+
+  tasks:
+  - name: Enable port for prometheuse , and grafana
+    shell:
+      cmd: "firewall-cmd --zone=public --add-port=9090/tcp --permanent"
+    become_user: root
+    register: result
+  - debug:
+      var: result
+
+
+  - name: Enable port for prometheuse , and grafana
+    shell:
+      cmd: "firewall-cmd --reload"
+    become_user: root
+    register: result
+  - debug:
+      var: result  

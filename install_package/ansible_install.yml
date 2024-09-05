@@ -1,0 +1,24 @@
+---
+
+- hosts: standby_pg16, primary
+  become: yes
+
+
+  tasks:
+
+  - name: Update cache via shell
+    shell:
+      cmd: "yum update -y"
+    register: result
+
+  - debug:
+      var: result
+
+  - name: Install ansible to standby and primary server
+    shell:
+      cmd: "yum install ansible httpd -y"
+    register: result
+  
+  - debug:
+      var: result
+

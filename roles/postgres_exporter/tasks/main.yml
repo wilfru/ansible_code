@@ -1,0 +1,85 @@
+---
+
+- name: Download PostgreSQL Exporter
+  get_url:
+    url: https://github.com/prometheus-community/postgres_exporter/releases/download/v0.15.0/postgres_exporter-0.15.0.linux-amd64.tar.gz
+    dest: /tmp/postgres_exporter-0.15.0.linux-amd64.tar.gz
+  register: result
+
+- debug:
+    var: result
+
+- name: Extract PostgreSQL Exporter
+  unarchive:
+    src: /tmp/postgres_exporter-0.15.0.linux-amd64.tar.gz
+    dest: /opt/
+    remote_src: yes
+  register: result
+
+- debug:
+    var: result
+
+- name: Move PostgreSQL Exporter Binaries
+  copy:
+    src: /opt/postgres_exporter-0.15.0.linux-amd64/postgres_exporter
+    dest: /usr/local/bin
+    remote_src: yes
+      #notify: restart postgres_exporter
+  register: result
+
+- debug:
+    var: result
+
+- name: Chmod for PostgreSQL Exporter
+  shell:
+    cmd: "chmod -R 755 /usr/local/bin/postgres_exporter"
+  register: result
+
+- debug:
+    var: result
+
+      #- name: Enable and Start PostgreSQL Exporter
+      #  shell:
+      #    cmd: "touch /etc/systemd/system/postgres_exporter.service "
+      #  register: result
+      #
+      #- debug:
+      #    var: result
+      #
+      #- name: Create PostgreSQL Exporter Service File
+      #  copy:
+      #    content: " 
+      #      [Unit]
+      #      Description=Prometheus PostgreSQL Exporter
+      #      Wants=network-online.target
+      #      After=network-online.target
+      #
+      #      [Service]
+      #      User=postgres
+      #      ExecStart=/usr/local/bin/postgres_exporter --web.listen-address=:9187 --web.telemetry-path=/metrics
+      #      Restart=always
+      #
+      #      [Install]
+      #      WantedBy=multi-user.target "
+      #    dest: /etc/systemd/system/postgres_exporter.service
+      # notify: restart postgres_exporter
+      #  register: result
+      #
+      #- debug:
+      #    var: result
+      #
+- name: Enable and Start PostgreSQL Exporter
+  shell:
+    cmd: "systemctl enable postgres_exporter "
+  register: result
+
+- debug:
+    var: result
+
+- name: Enable and Start PostgreSQL Exporter
+  shell:
+    cmd: "systemctl start postgres_exporter"
+  register: result
+
+- debug:
+    var: result

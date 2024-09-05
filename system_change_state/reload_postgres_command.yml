@@ -7,5 +7,5 @@
   tasks:
 
   - name: pg_ctl 16 to reload pg_hba config
-    ansible.builtin.shell: " /usr/pgsql-16/bin/pg_ctl reload -D /var/lib/pgsql/16/data "
+    ansible.builtin.shell: " /usr/pgsql-16/bin/pg_ctl restart -D /var/lib/pgsql/16/data -m fast "
 

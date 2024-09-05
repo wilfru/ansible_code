@@ -1,0 +1,41 @@
+---
+
+- hosts: standby_pg16
+  gather_facts: yes
+
+  tasks:
+  - name: Gather facts
+    setup:
+    register: result
+
+  - name: Check if data directory is empty
+    ansible.builtin.stat:
+      path: "/var/lib/pgsql/16/data/pg_hba.conf"
+    become: no
+      #become_user: postgres
+    register: postgres_data
+
+  - debug:
+      var: postgres_data
+
+  - name: clean data if files exist
+    shell:
+      cmd: rm -rf /var/lib/pgsql/16/data/*
+    when: not postgres_data.stat.exists
+    become: no
+      # become_user: postgres
+    register: result5
+
+  - debug:
+      var: result5
+
+
+  - name: pgbasebackup from standby servers to primary
+    shell:
+      cmd: "/usr/pgsql-16/bin/pg_basebackup -h 192.168.100.80 -p 5431 -U replicator --checkpoint=fast -Xs -R -l sdby1 --slot=sdby1 -D /var/lib/pgsql/16/data "
+    become: no
+      # become_user: postgres
+    register: result6
+
+  - debug:
+      var: result6

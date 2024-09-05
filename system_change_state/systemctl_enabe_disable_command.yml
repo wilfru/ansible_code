@@ -1,0 +1,22 @@
+---
+
+- hosts: standby_pg16
+  become: yes
+
+  tasks:
+
+  - name: Enable postgres sytemctl
+    shell:
+      cmd: "systemctl enable postgresql-16"
+    register: result
+
+  - debug:
+      var: result
+
+  - name: Start postgres systemctl
+    shell:
+      cmd: "systemctl start postgresql-16"
+    register: result2
+
+  - debug:
+      var: result2
