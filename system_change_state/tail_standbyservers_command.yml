@@ -1,0 +1,23 @@
+---
+
+- hosts: standby_pg16 primary
+  become: yes
+  gather_facts: no
+
+  tasks: 
+
+  - name: Tail stanby servers for errors on logs
+    shell:
+      cmd: "tail -n 10 /var/lib/pgsql/16/data/log/postgresql.log"
+    register: result
+
+  - debug:
+      var: result
+
+  - name: Tail stanby servers for errors on logs
+    shell:
+      cmd: "ps -ef | grep postgres"
+    register: result2
+
+  - debug:
+      var: result2

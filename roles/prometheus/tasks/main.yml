@@ -1,0 +1,162 @@
+---
+- name:
+  package:
+    update_cache: yes
+      #- name: Create Prometheus User
+      #  user:
+      #    name: prom_user
+      #    system: yes
+
+      #- name: Download Prometheus
+      #  get_url:
+      #    url: https://github.com/prometheus/prometheus/releases/download/v2.54.0-rc.1/prometheus-2.54.0-rc.1.linux-amd64.tar.gz
+      #    dest: /tmp/prometheus-2.54.0-rc.1.linux-amd64.tar.gz
+      #  register: result
+      #- debug:
+      #    var: result
+
+      #- name: Extract Prometheus
+      #  ansible.builtin.unarchive:
+      #    src: /tmp/prometheus-2.54.0-rc.1.linux-amd64.tar.gz
+      #    dest: /opt/
+      #    remote_src: yes
+      #  register: result
+    #- debug:
+  #    var: result
+
+      #- name: Create necessary directories for prometheus
+      #  shell:
+      #    cmd: "mkdir -p /etc/prometheus && mkdir -p /var/lib/prometheus && mkdir -p /usr/local/bin/prometheus && mkdir -p /usr/local/bin/promtool"
+      #  become_user: root
+      #  register: result
+      #- debug:
+      #    var: result
+
+      #- name: Create necessary directories permission for prometheus
+      #  shell:
+      #    cmd: "chown  prom_user:prom_user /etc/prometheus && chown  prom_user:prom_user /var/lib/prometheus "
+      #  become_user: root
+      #  register: result
+      #- debug:
+      #    var: result
+      #- name:
+      #  shell:
+      #    cmd: "cp -r /opt/prometheus-2.54.0-rc.1.linux-amd64/prometheus  /usr/local/bin"
+      #  become_user: root
+      #  register: result
+      #- debug:
+      #    var: result
+
+
+      #- name: Move Prometheus Consoles Files
+      #  shell:
+      #    cmd: "cp -r /opt/prometheus-2.54.0-rc.1.linux-amd64/promtool  /usr/local/bin"
+      #  become_user: root
+      #  register: result
+      #- debug:
+      #    var: result
+
+      #- name: Move Prometheus Consoles Files
+      #  shell:
+      #    cmd: "cp -r /opt/prometheus-2.54.0-rc.1.linux-amd64/consoles /etc/prometheus &&  cp -r /opt/prometheus-2.54.0-rc.1.linux-amd64/console_libraries /etc/prometheus"
+      #  become_user: root
+      #  register: result
+      #- debug:
+      #    var: result
+
+- name: Update necessary directory permission  prometheus
+  shell:
+    cmd: " chown prom_user:prom_user /usr/local/bin/prometheus &&  chown  prom_user:prom_user /usr/local/bin/promtool"
+  become_user: root
+  register: result
+- debug:
+    var: result
+
+- name: Chmod Binary directory permission  prometheus
+  shell:
+    cmd: " chmod -R 755 /usr/local/bin/prometheus && chmod 755 /etc/systemd/system/prometheus.service"
+  become_user: root
+  register: result
+- debug:
+    var: result
+
+      #- name: Create Prometheus Service File
+      #  shell:
+      #    cmd: "scp root@192.168.100.65:/etc/prometheus/prometheus.yml /etc/prometheus"
+      #  become_user: root
+      #  register: result
+      #- debug:
+      #    var: result
+
+      #- name: Create Prometheus Configuration File
+      # copy:
+      #    content: "
+      # global:
+      #  scrape_interval: 15s
+      #
+      # scrape_configs:
+      # - job_name: 'prom_user'
+      #   static_configs:
+      #     - targets: ['localhost:9187'] "
+      # dest: /etc/prometheus/prometheus.yml
+      #notify: restart prometheus  
+      #register: result
+      #- debug:
+      #var: result
+
+- name: Update necessary directory permission  prometheus
+  shell:
+    cmd: " chown prom_user:prom_user /usr/local/bin/prometheus &&  chown  prom_user:prom_user /usr/local/bin/promtool"
+  become_user: root
+  register: result
+- debug:
+    var: result
+
+      #- name: Create Prometheus Service File
+      #  shell:
+      #    cmd: "scp root@192.168.100.65:/etc/systemd/system/prometheus.service /etc/systemd/system"
+      #  become_user: root
+      #  register: result
+      #- debug:
+      #    var: result 
+
+
+- name: Update necessary directory permission for prometheus
+  shell:
+    cmd: "chown -R prom_user:prom_user /etc/prometheus && chown -R prom_user:prom_user /var/lib/prometheus "
+  become_user: root
+  register: result
+- debug:
+    var: result
+
+- name: Systemctl reload Daemon
+  shell:
+    cmd: "systemctl daemon-reload "
+  become_user: root
+  register: result
+- debug:
+    var: result
+
+- name: Enable  Prometheus
+  shell:
+    cmd: "systemctl enable prometheus "
+  become_user: root
+  register: result
+- debug:
+    var: result
+
+- name: Start Prometheus
+  shell:
+    cmd: "systemctl start prometheus"
+  become_user: root
+  register: result
+- debug:
+    var: result
+
+- name: Status Prometheus
+  shell:
+    cmd: "systemctl status prometheus"
+  become_user: root
+  register: result
+- debug:
+    var: result

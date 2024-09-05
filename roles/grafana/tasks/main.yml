@@ -1,0 +1,28 @@
+---
+
+#- name: Add Grafana APT Key
+# package:
+#   name: apache
+#   state: present
+# register: result
+#- debug:
+#    var: result
+
+- name: Install Grafana
+  package:
+    name: grafana
+    state: latest
+    update_cache: yes
+  register: result
+- debug:
+    var: result
+
+- name: Enable and Start Grafana
+  systemd:
+    name: grafana-server
+    enabled: yes
+    state: started
+
+  register: result
+- debug:
+    var: result

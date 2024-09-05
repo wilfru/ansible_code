@@ -1,0 +1,26 @@
+---
+
+- hosts: standby_pg16 primary
+  become: yes
+
+
+
+  tasks:
+
+
+  - name: Check ansible if installed and version
+    shell:
+      cmd: 'yum list installed | grep -e ansible -e httpd' 
+    register: result
+
+  - debug:
+      var: result
+
+
+  - name: Check ansible if installed and version
+    shell:
+      cmd: 'systemctl status ansible httpd'
+    register: result
+
+  - debug:
+      var: result

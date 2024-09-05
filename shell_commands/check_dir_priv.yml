@@ -1,0 +1,32 @@
+---
+
+- hosts: standby_pg16
+  gather_facts: yes
+
+
+  tasks:
+
+  - name: Check dir for group and user priviledges
+    shell:
+      cmd: "ls -al /var/lib/pgsql"
+    register: result
+
+  - debug:
+      var: result
+
+  - name: Check dir for group and user priviledges
+    shell:
+      cmd: "ls -al /var/lib/pgsql/16/data"
+    register: result2
+
+  - debug:
+      var: result2
+
+  - name: change data dir permission
+    shell:
+      cmd: "chown -R postgres:postgres /var/lib/pgsql"
+    become: yes
+    register: result3
+
+  - debug:
+      var: result3 

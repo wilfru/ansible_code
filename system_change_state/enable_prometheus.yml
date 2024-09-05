@@ -1,0 +1,71 @@
+---
+
+- hosts: primary standby_pg16
+  become: yes
+  gather_facts: no
+
+
+  tasks:
+  
+  - name: Stop Postgres_exporter
+    shell:
+      cmd: "systemctl stop postgres_exporter"
+        #register: result
+
+  - name: Export Postgres_exporter Environment root
+    shell:
+      cmd: ' export DATA_SOURCE_NAME="postgresql://postgres@:5431/postgres?host=/var/run/postgresql/&sslmode=disable" '
+    become_user: root
+      # register: result
+  
+      #- debug:
+      #var: result
+
+  - name: Export Postgres_exporter Environment postgres
+    shell:
+      cmd: 'export DATA_SOURCE_NAME="postgresql://postgres@:5431/postgres?host=/var/run/postgresql/&sslmode=disable" '
+    become_user: postgres
+      #register: result
+  
+      #- debug:
+      #var: result
+
+  - name: Source Postgres_exporter in .Bash_profile
+    shell:
+      cmd: "source /root/.bash_profile"
+        # register: result
+  
+      #- debug:
+      #var: result
+  
+        #  - name: Source Postgres_exporter in .Bash_profile
+        #shell:
+        # cmd: "source ~/.bash_profile"
+        #    become_user: postgres    
+        # register: result
+
+      #- debug:
+      #var: result
+  - name: Resfres system Daemo Postgres_exporter
+    shell:
+      cmd: "systemctl daemon-reload"
+        # register: result
+  
+      #- debug:
+      #var: result
+
+  - name: Start Postgres_exporter
+    shell:
+      cmd: "systemctl start postgres_exporter"
+        # register: result
+  
+      #  - debug:
+      # var: result
+
+  - name: Status Postgres_exporter
+    shell:
+      cmd: "systemctl status postgres_exporter"
+    register: result
+  
+  - debug:
+      var: result

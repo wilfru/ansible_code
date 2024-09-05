@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: yes
+  become_user: postgres
+  gather_facts: no
+
+  tasks:
+    
+  - name: Create Pgpass files
+    shell:
+      cmd: 'echo "localhost:5431:*:postgres:" > ~/.pgpass'
+    register: result
+
+  - debug:
+      var: result
